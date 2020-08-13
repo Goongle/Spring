@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">	
+	<!-- Exam exam = new NewlecExam(); -->
+	
+	<bean id = "target" class ="spring.aop.entity.NewlecExam" p:kor = "1" p:eng = "1" p:math = "1" p:com = "1"></bean>
+	<bean id = "logAroundAdvice" class = "spring.aop.advice.LogAroundAdvice"/>
+	<bean id = "logBeforeAdvice" class = "spring.aop.advice.logBeforeAdvice"/>
+	<bean id = "logAfterRturningAdvice" class = "spring.aop.advice.LogAfterRturningAdvice"/>
+	<bean id = "logThrowingRturningAdvice" class = "spring.aop.advice.LogThrowingRturningAdvice"/>
+	
+<!-- 	<bean id = "classicPointCut" class = "org.springframework.aop.support.NameMatchMethodPointcut">
+	 이는 Name을 기준으로 하는 Point Cut을 만드는 것이다.
+	 만약 Total에 대해서만 Weaving이 수행되게 하고 싶으면 아래와 같이 Property를 입력해야 한다.
+	<property name = "mappedName" value = "total"/>
+	어떠한 Advice를 포인트컷과 사용할 것인지 결정을 해줘야 한다.
+	</bean>
+	<bean id = "classicBeforeAdvisor" class = "org.springframework.aop.support.DefaultPointcutAdvisor">
+	<property name="advice" ref = "logBeforeAdvice"></property>
+	<property name="pointcut" ref = "classicPointCut"></property>
+	</bean> -->
+	
+<!-- 	<bean id = "classicBeforeAdvisor" class = "org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+	<property name="advice" ref = "logBeforeAdvice"></property>
+	<property name = "mappedNames">
+		<list>
+			<value>total</value>
+			<value>avg</value>
+		</list>
+	</property>
+	</bean> -->
+	
+	<bean id = "classicBeforeAdvisor" class = "org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+	<property name="advice" ref = "logBeforeAdvice"></property>
+	<property name = "patterns">
+		<list>
+			<value>.*to.*</value>
+		</list>
+	</property>
+	</bean>
+	
+<!-- 	<bean id = "classicAroundAdvisor" class = "org.springframework.aop.support.DefaultPointcutAdvisor">
+	<property name="advice" ref = "logAroundAdvice"></property>
+	<property name="pointcut" ref = "classicPointCut"></property>
+	</bean> -->
+	
+	<bean id = "classicAroundAdvisor" class = "org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+	<property name="advice" ref = "logAroundAdvice"></property>
+	<property name = "mappedName" value = "total"/>
+	</bean>
+	
+	<bean id="exam" class = "org.springframework.aop.framework.ProxyFactoryBean"> 
+		<property name = "target" ref = "target"/>  <!--  getClassLoader 를 스프링이 자발적으로 처리 -->
+		<property name="interceptorNames"> <!-- 핸들러 지정 -->
+			<list>
+				<value>classicAroundAdvisor</value> <!-- 로직의 앞뒤로 수행  -->
+				<value>classicBeforeAdvisor</value> <!-- 로직의 뒤로 수행  -->
+				<value>logAfterRturningAdvice</value> <!-- 본 루직 수행 후 반환 값으로수행  -->
+				<value>logThrowingRturningAdvice</value> 
+			</list>		
+		</property>
+	</bean>
+	</beans>

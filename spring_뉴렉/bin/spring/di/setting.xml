@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- Exam exam = new NewlecExam(); -->
+	<bean id = "exam" class = "spring.di.entity.NewlecExam" />
+	<!--ExamConsole console = new GridExamConsole(); -->
+	<bean id = "console" class = "spring.di.ui.GridExamConsole" >
+		<property name = "exam" ref = "exam"> </property>
+		<!--  Property에 넣으면 set을 생략하고 함수명은 소문자로 변경한다. -->
+		<!--  value, ref 속성을 통해 값을 넣어줄 수 있다. 여기에는 현재 Class가 들어가는 것 -->
+		<!--  ref는 객체와 같은 것을 의미하며 Value는 단순 값을 의미한다. -->
+	</bean>
+
+</beans>
