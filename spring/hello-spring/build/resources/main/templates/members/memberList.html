@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th ="http://www.thymeleaf.org">
+<head>
+    <title>Hello</title>
+    <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8"/>
+</head>
+<body>
+
+<div class ="container">
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>이름</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 아래는 thymeleaf 문법이다 -->
+            <!-- id, name 은 private이라 안된다. 하지만 이는 getter setter 를 통해 가능하다. -->
+            <tr th:each ="member : ${members}">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.name}"></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+</div> <!-- Container -->
+
+</body>
+</html>
