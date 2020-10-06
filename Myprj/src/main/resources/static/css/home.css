@@ -1,0 +1,16 @@
+.navbar-nav {
+       height: 40px;
+}
+
+.navbar-nav > li{
+  padding-left:30px;
+  padding-right:30px;
+  font-size: x-large;
+  margin: auto;
+  height:auto;
+  }
+
+.navbar-nav .nav-item dropdown
+  {
+  height: 30px;
+  }

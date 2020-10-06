@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>전체 글 목록</title>
+    <link rel="stylesheet" href="../css/bootstrap.css"/>
+    <link rel="stylesheet" href="../css/list.css"/>
+    <link rel="stylesheet" href="../css/site.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+</head>
+
+<body>
+<!-- HEADER -->
+<div th:insert="common/header.html" id="header"></div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th class="one wide">번호</th>
+        <th class="ten wide">글제목</th>
+        <th class="two wide">작성자</th>
+        <th class="three wide">작성일</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <!-- CONTENTS !-->
+    <tr th:each="board : ${boardList}">
+        <td>
+            <span th:text="${board.idx}"></span>
+        </td>
+        <td>
+            <a th:href="@{'/post/' + ${board.idx}}">
+                <span th:text="${board.title}"></span>
+            </a>
+        </td>
+        <td>
+            <span th:text="${board.writer}"></span>
+        </td>
+        <td>
+            <span th:text="${board.insertTime}"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<nav>
+    <div class ="text-center">
+        <ul class="pagination justify-content-center">
+        <li class="page-item">
+            <a class="page-link" th:href="@{/board/list?page=1}" aria-label="Previous">
+                <span aria-hidden="true">처음</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:href="@{/board/list?page={page} (page = ${pagination.prevBlock})}" aria-label="Previous">
+                <span aria-hidden="true">이전</span>
+            </a>
+        </li>
+        <th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+            <li class="page-item"
+                th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+                th:each="pageButton : ${#numbers.sequence(start, end)}">
+                <a class="page-link" th:href="@{/board/list?page={page} (page = ${pageButton})}" th:text=${pageButton}></a>
+            </li>
+        </th:block>
+        <li class="page-item">
+            <a class="page-link" th:href="@{/board/list?page={page} (page = ${pagination.nextBlock})}" aria-label="Next">
+                <span aria-hidden="true">다음</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:href="@{/board/list?page={page} (page = ${pagination.totalPageCnt})}" aria-label="Previous">
+                <span aria-hidden="true">끝</span>
+            </a>
+        </li>
+    </ul>
+    </div>
+</nav>
+<div class="text-center">
+<a th:href="@{/board/post}">
+    <button type="submit" class="btn btn-primary" value="수정">글쓰기</button>
+</a>
+</div>
+
+
+<!-- FOOTER -->
+<div th:insert="common/footer.html" id="footer"></div>
+</body>
+</html>

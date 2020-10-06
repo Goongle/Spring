@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th ="http://www.thymeleaf.org">
+<head>
+    <title>회원가입</title>
+    <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/createmember.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/createmember.css"/>
+
+    <style>
+        #Submit_button
+        {
+        width: auto;
+        height: auto;
+        }
+
+        #send
+        {
+        display:flex;
+        }
+        #email_ID
+        {
+         flex :1;
+        }
+    </style>
+</head>
+
+<body>
+<div th:insert="common/header.html" id="header"></div>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+
+        <!-- Icon -->
+        <div class="fadeIn first">
+            Sing UP
+        </div>
+
+        <form name= "Sending_Form" th:action="@{/mail}" method = "post">
+            <div id = "send" style= "width:85%;" class="clearfix">
+                <input type="text" id="email_ID" class="fadeIn second pull-left" name= "email_ID" placeholder="Email을 입력하세요.">
+                <input type ="hidden" name = "${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button type="button" id="send_button" class= "fadeIn second pull-right btn-primary" name="send_button" onclick = "Send();">
+                    Send
+                </button>
+            </div>
+        </form>
+
+        <form name= "Verifying_Form" th:action="@{/verifyCode}" method = "post">
+            <div style= "width:85%;" class="clearfix">
+                <input type="text" id="verify_id" class="fadeIn second pull-left" name= "verify_id" placeholder="인증정보를 입력해주세요.">
+                <input type ="hidden" name = "${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button type="button" id="Verify_button" class= "fadeIn second pull-right btn-primary" name="Verify_button" onclick = "Verify();">
+                    Send
+                </button>
+            </div>
+        </form>
+
+        <!-- Sing up Form -->
+        <form name = "Signup_form" th:action="@{/join}" method = "post">
+            <input type="text" id="username" class="fadeIn second" name="username" placeholder="ID">
+            <input type="text" id="password" class="fadeIn second" name="password" placeholder="Password">
+            <input type="text" id="Email" class="fadeIn second" name="email" placeholder="Email">
+        </form>
+        <button type="button" id="Submit_button" class="fadeIn fourth btn btn-primary" value="Singup" onclick= "Validate();">
+            Signup
+        </button>
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>
+
+    </div>
+</div>
+
+<div th:insert="common/footer.html" id="footer"></div>
+
+</body>
+</html>

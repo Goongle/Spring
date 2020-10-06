@@ -1,0 +1,47 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.3.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+group = 'project'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect') // thymeleaf를 이용하여 레이아웃 배치를 위한 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail' // Email 인증을 위한 모듈
+
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: '2.3.4.RELEASE' // JSON 처리를 위한 모듈
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.projectlombok:lombok'
+    implementation 'junit:junit:4.12'
+	implementation 'junit:junit:4.12'
+	implementation 'junit:junit:4.12'
+	implementation 'junit:junit:4.12'
+
+	compile group: 'org.webjars.bower', name: 'jquery', version: '3.5.1'
+
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.4.RELEASE'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	compile 'mysql:mysql-connector-java'
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}

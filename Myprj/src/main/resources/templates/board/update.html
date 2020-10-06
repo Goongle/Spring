@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>글 수정</title>
+    <link rel="stylesheet" href="../css/bootstrap.css"/>
+    <link rel="stylesheet" href="../css/site.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+</head>
+<body>
+<div th:insert="common/header.html" id="header"></div>
+
+<form th:action="@{'/post/edit/' + ${board.idx}}" method="post">
+    <input type="hidden" name= "_method" value="put"/>
+    <input type="hidden" name= "id" th:value="${board.idx}"/>
+
+    제목 : <input type="text" name="title" th:value="${board.title}"> <br>
+    작성자 : <input type="text" name="writer" th:value="${board.writer}"> <br>
+    <textarea name="content" th:text="${board.content}"></textarea><br>
+
+    <button type="submit" class="btn btn-primary" value="수정">제출</button>
+</form>
+
+<div th:insert="common/footer.html" id="footer"></div>
+
+
+</body>
+</html>
