@@ -2,6 +2,9 @@ function Validate()
    {
            var form = document.Signup_form;
 
+           var token = $("input[name='_csrf']").val();
+           var header = "X-CSRF-TOKEN";
+
                   //아이디에서 입력 필수 조건문
                   if (form.username.value == "")
                   {
@@ -72,7 +75,46 @@ function Validate()
             data: JSON.stringify(json_value),
             contentType : "application/json",
             dataType  : "json",
-            beforeSend : function(xhr)
+            beforeSend : function(xhr){
+            xhr.setRequestHeader(header, token);
+            }
+            });
+
+           var form3 = document.Verifying_Form;
+                  if (form3.verify_id.value == "")
+                  {
+                          alert("인증 번호를 입력하세요.");
+                          form3.verify_id.focus();//포커스를 id박스로 이동.
+                          return;
+                  }
+
+            var json_value  = {"verifyCode" : form3.verify_id.value};
+                $.ajax({
+                    type: "POST",
+                    url: "/verifyCode",
+                    data: JSON.stringify(json_value),
+                    contentType : "application/json",
+                    dataType  : "json",
+                beforeSend : function(xhr)
+                {
+                xhr.setRequestHeader(header, token);
+                },
+                success : function(data) {
+                         console.log(data.result)
+                        if (data.result == "1"){
+                          form3.verify_id.disabled = 'true';
+                          } else {
+                             alert("인증 번호가 틀립니다.");
+                             form3.verify_id.focus();
+                             return;
+                             }
+                                },
+                               error : function(data)
+                                {
+                                console.log(data.status);
+                                }
+        });
+            alert("가입 되었습니다.");
             form.submit();
 }
 
@@ -128,49 +170,46 @@ function Send()
             form2.email_ID.disabled = 'true';
 }
 
-function Verify()
-   {
-
-           var token = $("input[name='_csrf']").val();
-           var header = "X-CSRF-TOKEN";
-
-           var form3 = document.Verifying_Form;
-                  if (form3.verify_id.value == "")
-                  {
-                          alert("");
-                          form3.verify_id.focus();//포커스를 id박스로 이동.
-                          return;
-                  }
-
-            var json_value  = {"verifyCode" : form3.verify_id.value};
-                $.ajax({
-                    type: "POST",
-                    url: "/verifyCode",
-                    data: JSON.stringify(json_value),
-                    contentType : "application/json",
-                    dataType  : "json",
-                beforeSend : function(xhr)
-                {
-                xhr.setRequestHeader(header, token);
-                },
-                success : function(data) {
-                         console.log(data.result)
-                        if (data.result == "1"){
-                          console.log("Success");
-                          alert("인증 되었습니다.");
-                          form3.verify_id.disabled = 'true';
-                          } else {
-                             console.log("Fail");
-                             alert("인증 번호가 틀립니다.");
-                             form3.verify_id.focus();
-                             return;
-                             }
-                                },
-                               error : function(data)
-                                {
-                                console.log(data.status);
-
-                                }
-        });
-           // form3.email_ID.disabled = 'true';
-}
+//function Verify()
+//   {
+//           var token = $("input[name='_csrf']").val();
+//           var header = "X-CSRF-TOKEN";
+//
+//           var form3 = document.Verifying_Form;
+//                  if (form3.verify_id.value == "")
+//                  {
+//                          alert("인증 번호를 입력하세요.");
+//                          form3.verify_id.focus();//포커스를 id박스로 이동.
+//                          return;
+//                  }
+//
+//            var json_value  = {"verifyCode" : form3.verify_id.value};
+//                $.ajax({
+//                    type: "POST",
+//                    url: "/verifyCode",
+//                    data: JSON.stringify(json_value),
+//                    contentType : "application/json",
+//                    dataType  : "json",
+//                beforeSend : function(xhr)
+//                {
+//                xhr.setRequestHeader(header, token);
+//                },
+//                success : function(data) {
+//                         console.log(data.result)
+//                        if (data.result == "1"){
+//                          console.log("Success");
+//                          alert("인증 되었습니다.");
+//                          form3.verify_id.disabled = 'true';
+//                          } else {
+//                             console.log("Fail");
+//                             alert("인증 번호가 틀립니다.");
+//                             form3.verify_id.focus();
+//                             return;
+//                             }
+//                                },
+//                               error : function(data)
+//                                {
+//                                console.log(data.status);
+//                                }
+//        });
+//}

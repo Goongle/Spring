@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import project.Myprj.domain.Email;
 import project.Myprj.service.EmailService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class EmailController {
@@ -37,10 +39,11 @@ public class EmailController {
 
         String code = (String) param.get("verifyCode");
         int result = 0;
-        System.out.println("code : "+code);
-        System.out.println("code match : "+ emailService.ePW.equals(code));
-        if(emailService.ePW.equals(code)) {
-            result =1;
+
+
+        Optional<Email> list = emailService.findbycontent(code);
+        if(list.isPresent()) {
+            result = 1;
         }
         Map<String, String> map = new HashMap<>();
 

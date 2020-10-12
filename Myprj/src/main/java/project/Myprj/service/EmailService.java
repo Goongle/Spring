@@ -4,22 +4,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import project.Myprj.domain.Board;
+import project.Myprj.domain.Email;
+import project.Myprj.repository.board.BoardRepository;
+import project.Myprj.repository.email.EmailRepository;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.Random;
 
-@Service
+@Transactional
 public class EmailService {
+
+    private final EmailRepository emailRepository;
+
+    @Autowired
+    public EmailService(EmailRepository emailRepository) {
+        this.emailRepository = emailRepository;
+    }
 
     @Autowired
     JavaMailSender javaMailSender;
 
-    public static final String ePW = createKey();
+    public Optional<Email> findbycontent(String content) {
+        return emailRepository.findByContext(content);
+    }
 
     private MimeMessage createMessage(String to)throws Exception{
+        Email email = new Email();
+        String temp = createKey();
+        email.setContent(temp);
         System.out.println("보내는 대상 : "+ to);
-        System.out.println("인증 번호 : "+ ePW);
+        System.out.println("인증 번호 : "+ temp);
         MimeMessage  message = javaMailSender.createMimeMessage();
 
         message.addRecipients(MimeMessage.RecipientType.TO, to);//보내는 대상
@@ -37,11 +55,13 @@ public class EmailService {
         msgg+= "<h3 style='color:blue;'>회원가입 코드입니다.</h3>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "CODE : <strong>";
-        msgg+= ePW +"</strong><div><br/> ";
+        msgg+= temp +"</strong><div><br/> ";
         msgg+= "</div>";
         message.setText(msgg, "utf-8", "html");//내용
         message.setFrom(new InternetAddress("prime4floor@gmail.com","장수창"));//보내는 사람
         // InternetAddress 클래스에 주소와 이름을 넣어서 messeage 생성
+        emailRepository.save(email);
+
         return message;
     }
 
@@ -49,7 +69,7 @@ public class EmailService {
     // MimeMessage 같은 경우 멀티미디어 메세지를 보낼 수 있다.
     // SimpleMailMessage 같은 경우 단순 텍스트 데이터만 보낼 수 있다.
     // 인증 코드 만들기
-    public static String createKey() {
+    public String createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
@@ -80,7 +100,6 @@ public class EmailService {
         // 이메일 보내는 Method
         MimeMessage message = createMessage(to);
         try{
-            System.out.println("asdasd");
             System.out.println(message.getFrom());
             System.out.println(message.getSender());
             javaMailSender.send(message);
